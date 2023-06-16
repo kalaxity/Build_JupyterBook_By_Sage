@@ -12,6 +12,7 @@ jobs:
       image: computop/sage
     steps:
       # test
+      - uses: actions/checkout@v3
       - name: version
         run: sage -v
         
