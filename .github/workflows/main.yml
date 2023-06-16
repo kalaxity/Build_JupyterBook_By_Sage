@@ -8,6 +8,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    container:
+      image: computop/sage
     steps:
       # actions/checkoutという外部アクションを実行し，自身のレポジトリのデータを読み込む
       - uses: actions/checkout@v3
@@ -17,3 +19,7 @@ jobs:
 
       - name: Run the compiled file
         run: ./a.out
+        
+      # test
+      - name: version
+        run: sage -v
