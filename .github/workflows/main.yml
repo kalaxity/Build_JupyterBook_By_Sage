@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: sagemath/sagemath
+      options: --user root
     steps:
       # test
       - uses: actions/checkout@v3
