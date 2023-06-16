@@ -9,21 +9,12 @@ jobs:
   sage:
     runs-on: ubuntu-latest
     container:
-      image: computop/sage
+      image: sagemath/sagemath
     steps:
       # test
       - uses: actions/checkout@v3
       - name: version
         run: sage -v
-        
-  ubuntu:
-    runs-on: ubuntu-latest
-    container:
-      image: ubuntu
-    steps:
-      - uses: actions/checkout@v3
-      - name: version
-        run: cat /etc/issue
         
   build:
     runs-on: ubuntu-latest 
