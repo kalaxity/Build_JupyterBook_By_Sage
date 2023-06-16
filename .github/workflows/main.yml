@@ -1,0 +1,19 @@
+name: Compile
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # actions/checkoutという外部アクションを実行し，自身のレポジトリのデータを読み込む
+      - uses: actions/checkout@v3
+
+      - name: Compile .cpp file
+        run: g++ -Wall ./test.cpp
+
+      - name: Run the compiled file
+        run: ./a.out
