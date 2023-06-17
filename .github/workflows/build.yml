@@ -33,8 +33,8 @@ jobs:
           cp src/*.md test_book
           /home/sage/sage/local/var/lib/sage/venv-python*/bin/jupyter-book myst init test_book/*.md --kernel python3
           /home/sage/sage/local/var/lib/sage/venv-python*/bin/jb build test_book
-      - name: copy built files to /
-        run: cp -r test_book/_build/html/* .
+#       - name: copy built files to /
+#         run: cp -r test_book/_build/html/* .
       - name: push the files to the repository
         run: | 
           git config user.name github-actions
@@ -42,6 +42,13 @@ jobs:
           git add .
           git commit -m "build by github actions"
           git push
+          
+      # Push the book's HTML to github-pages
+      - name: GitHub Pages action
+        uses: peaceiris/actions-gh-pages@v3.6.1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./_build/html
         
 #   build:
 #     runs-on: ubuntu-latest 
