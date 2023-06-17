@@ -1,4 +1,4 @@
-name: Compile
+name: build
 
 on:
   push:
@@ -27,7 +27,7 @@ jobs:
       - name: prepare jupyter-book
         run: |
           /home/sage/sage/local/var/lib/sage/venv-python*/bin/pip install jupyter-book jupytext
-          /home/sage/sage/local/var/lib/sage/venv-python*/bin/jb create test_book
+          if [ -d ${DIR} ]; then echo "skip"; else /home/sage/sage/local/var/lib/sage/venv-python*/bin/jb create test_book; fi
       - name: bring markdown files and build them
         run: |
           rm README.md
