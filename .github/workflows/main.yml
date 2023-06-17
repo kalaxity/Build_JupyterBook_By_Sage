@@ -5,6 +5,9 @@ on:
     branches: ["main"]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   sage:
     runs-on: ubuntu-latest
@@ -15,10 +18,14 @@ jobs:
       image: sagemath/sagemath
       options: --user root
     steps:
+      - name: install git
+        run: sudo apt update && sudo apt install -y git
       - uses: actions/checkout@v3
-      - name: prepare git and jupyter-book
+      - name: Add safe directory
+        run: git config --global --add safe.directory $PWD
+        
+      - name: prepare jupyter-book
         run: |
-          sudo apt update && sudo apt install -y git
           /home/sage/sage/local/var/lib/sage/venv-python*/bin/pip install jupyter-book jupytext
           /home/sage/sage/local/var/lib/sage/venv-python*/bin/jb create test_book
       - name: bring markdown files and build them
