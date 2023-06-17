@@ -15,7 +15,7 @@ kernelspec:
 
 # Test document
 ## 1. let's start
-this is a test document!
+This is a test document!
 
 ```{code-cell}
 from sage.all import *
