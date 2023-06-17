@@ -5,37 +5,39 @@ on:
     branches: ["main"]
   workflow_dispatch:
 
-permissions:
+permissions: # これがないとpushできない
   contents: write
 
 jobs:
   sage:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
+#     defaults:
+#       run:
+#         shell: bash # /bin/shだからうまくいかないと考えたが関係なかった
     container:
       image: sagemath/sagemath
-      options: --user root
+      options: --user root # このイメージは起動時のユーザがrootではないので，ここでrootに指定する
     steps:
-      - name: install git
+      - name: install git # checkout前にgitのインストール
         run: sudo apt update && sudo apt install -y git
-      - uses: actions/checkout@v3
-      - name: Add safe directory
+      - uses: actions/checkout@v3 # checkout
+      - name: Add safe directory # git pushに必要
         run: git config --global --add safe.directory $PWD
         
-      - name: prepare jupyter-book
+      - name: prepare jupyter-book 
+        # pipなどは絶対パスで指定しないとエラーが出る https://qiita.com/oiz-y/items/b2e44caad4c5967bf9e9
+        # あとtest_bookがあるのにjb createすると怒られるのでif文を追加
         run: |
           /home/sage/sage/local/var/lib/sage/venv-python*/bin/pip install jupyter-book jupytext
           if [ -d ${DIR} ]; then echo "skip"; else /home/sage/sage/local/var/lib/sage/venv-python*/bin/jb create test_book; fi
-      - name: bring markdown files and build them
+      - name: bring markdown files and build them # srcディレクトリからmdファイルを持ってきてからtest_bookをビルド
         run: |
           cp src/*.md test_book
-          /home/sage/sage/local/var/lib/sage/venv-python*/bin/jupyter-book myst init test_book/*.md --kernel python3
+          /home/sage/sage/local/var/lib/sage/venv-python*/bin/jb myst init test_book/*.md --kernel python3
           /home/sage/sage/local/var/lib/sage/venv-python*/bin/jb build test_book
-#       - name: copy built files to /
-#         run: cp -r test_book/_build/html/* .
-      - name: push the files to the repository
+      - name: push the files to the repository # リポジトリにpush 
+        # ref1: https://qiita.com/h_tyokinuhata/items/ffc1d43420936a3615b1
+        # ref2: https://monomonotech.jp/kurage/memo/m220216_github_actions_hello_world.html
         run: | 
           git config user.name github-actions
           git config user.email github-actions@github.com
@@ -45,11 +47,12 @@ jobs:
           
       # Push the book's HTML to github-pages
       - name: GitHub Pages action
-        uses: peaceiris/actions-gh-pages@v3.6.1
+        uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./test_book/_build/html
-        
+
+# 以下は初期テストで使用したコード 意味無し
 #   build:
 #     runs-on: ubuntu-latest 
 #     steps:
