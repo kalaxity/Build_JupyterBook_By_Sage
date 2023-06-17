@@ -15,16 +15,18 @@ jobs:
       image: sagemath/sagemath
       options: --user root
     steps:
-      # test
       - uses: actions/checkout@v3
-      - name: version
-        run: sage -v
-      - name: ls
-        run: ls -la
-      - name: prepare jupyter-book env
-        run: /home/sage/sage/local/var/lib/sage/venv-python*/bin/pip install jupyter-book jupytext && /home/sage/sage/local/var/lib/sage/venv-python*/bin/jb create test_book
+      - name: prepare git and jupyter-book
+        run: |
+          sudo apt update && sudo apt install -y git
+          /home/sage/sage/local/var/lib/sage/venv-python*/bin/pip install jupyter-book jupytext
+          /home/sage/sage/local/var/lib/sage/venv-python*/bin/jb create test_book
       - name: bring markdown files and build them
-        run: cd test_book && /home/sage/sage/local/var/lib/sage/venv-python*/bin/jb build . && cd ..
+        run: |
+          rm README.md
+          cp *.md test_book
+          /home/sage/sage/local/var/lib/sage/venv-python*/bin/jupyter-book myst init testbook/*.md --kernel python3
+          /home/sage/sage/local/var/lib/sage/venv-python*/bin/jb build test_book
       - name: copy built files to /
         run: cp -r test_book/_build/html/* .
       - name: push the files to the repository
