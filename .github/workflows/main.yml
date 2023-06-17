@@ -25,7 +25,7 @@ jobs:
         run: |
           rm README.md
           cp *.md test_book
-          /home/sage/sage/local/var/lib/sage/venv-python*/bin/jupyter-book myst init testbook/*.md --kernel python3
+          /home/sage/sage/local/var/lib/sage/venv-python*/bin/jupyter-book myst init test_book/*.md --kernel python3
           /home/sage/sage/local/var/lib/sage/venv-python*/bin/jb build test_book
       - name: copy built files to /
         run: cp -r test_book/_build/html/* .
