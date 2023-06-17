@@ -22,7 +22,18 @@ jobs:
       - name: ls
         run: ls -la
       - name: prepare jupyter-book env
-        run: env && pip install jupyter-book jupytext && jb create test_book && cd test_book && jb build .
+        run: /home/sage/sage/local/var/lib/sage/venv-python*/bin/pip install jupyter-book jupytext && /home/sage/sage/local/var/lib/sage/venv-python*/bin/jb create test_book
+      - name: bring markdown files and build them
+        run: cd test_book && /home/sage/sage/local/var/lib/sage/venv-python*/bin/jb build . && cd ..
+      - name: copy built files to /
+        run: cp -r test_book/_build/html/* .
+      - name: push the files to the repository
+        run: | 
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "build by github actions"
+          git push
         
 #   build:
 #     runs-on: ubuntu-latest 
