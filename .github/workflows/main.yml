@@ -22,7 +22,7 @@ jobs:
       - name: ls
         run: ls -la
       - name: prepare jupyter-book env
-        run: pip install jupyter-book jupytext && jb create test_book && cd test_book && jb build .
+        run: env && pip install jupyter-book jupytext && jb create test_book && cd test_book && jb build .
         
 #   build:
 #     runs-on: ubuntu-latest 
