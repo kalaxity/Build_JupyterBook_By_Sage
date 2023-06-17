@@ -16,13 +16,17 @@ jobs:
       - uses: actions/checkout@v3
       - name: version
         run: sage -v
+      - name: ls
+        run: ls -la
+      - name: prepare jupyter-book env
+        run: pip install jupyter-book jupytext && jb create test_book && cd test_book && jb build .
         
-  build:
-    runs-on: ubuntu-latest 
-    steps:
-      # actions/checkoutという外部アクションを実行し，自身のレポジトリのデータを読み込む
-      - uses: actions/checkout@v3
-      - name: Compile .cpp file
-        run: g++ -Wall ./test.cpp
-      - name: Run the compiled file
-        run: ./a.out      
+#   build:
+#     runs-on: ubuntu-latest 
+#     steps:
+#       # actions/checkoutという外部アクションを実行し，自身のレポジトリのデータを読み込む
+#       - uses: actions/checkout@v3
+#       - name: Compile .cpp file
+#         run: g++ -Wall ./test.cpp
+#       - name: Run the compiled file
+#         run: ./a.out      
