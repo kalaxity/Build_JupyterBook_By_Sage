@@ -8,6 +8,9 @@ on:
 jobs:
   sage:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
     container:
       image: sagemath/sagemath
       options: --user root
