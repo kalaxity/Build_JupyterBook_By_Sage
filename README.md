@@ -1,4 +1,4 @@
-# Github_Action_Test
+# Build_JupyterBook_By_Sage
 GithubActionsを使って
 
 - SagemathのDockerイメージを立ててMyst Markdownファイルへのコンパイルを実行
